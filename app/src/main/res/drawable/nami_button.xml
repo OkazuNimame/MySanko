@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Solid color for the button -->
+    <solid android:color="#FF4081" />
+
+    <!-- Corners for the button -->
+    <corners android:radius="20dp" />
+
+    <!-- Padding for the button -->
+    <padding
+        android:left="10dp"
+        android:top="10dp"
+        android:right="10dp"
+        android:bottom="10dp" />
+
+    <!-- Shape gradient -->
+    <gradient
+        android:angle="45"
+        android:startColor="@color/blue"
+        android:centerColor="#7F20"
+        android:endColor="#FF4081"
+        android:type="linear" />
+
+    <!-- Shape size -->
+    <size
+        android:width="200dp"
+        android:height="60dp" />
+
+    <!-- Wave-like effect -->
+    <item>
+        <shape>
+            <corners android:radius="20dp" />
+            <solid android:color="#FF4081" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+    <stroke
+        android:color="@color/black"
+        android:width="5dp"/>
+</shape>
