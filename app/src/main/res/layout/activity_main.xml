@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,48 +7,60 @@
     android:background="@drawable/layout_back_color"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/kakukaku"
-        android:gravity="center"
-        android:text="@string/textH1"
-        android:textSize="70sp"
-        tools:ignore="MissingConstraints,RtlHardcoded"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/tyoikaku"
-        android:text="@string/textH2"
-        android:textColor="@color/blue"
-        android:textSize="60sp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="165dp"
-        tools:layout_editor_absoluteY="16dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="200sp"
-        android:layout_height="90sp"
-        android:background="@drawable/nami_button"
-        android:text="@string/button_text1"
-        android:textSize="40sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/my"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kakukaku"
+            android:gravity="center"
+            android:text="@string/textH1"
+            android:textSize="70sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            android:textColor="@color/black"
+            android:layout_margin="40dp"
+            tools:ignore="RtlHardcoded" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/tyoinameraka"
-        android:gravity="center"
-        android:text="@string/textH3"
-        android:textSize="45sp"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/sanko"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tyoikaku"
+            android:text="@string/textH2"
+            android:textColor="@color/blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            android:layout_margin="160dp"
 
+            android:textSize="60sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tap"
+            android:layout_width="200sp"
+            android:layout_height="90sp"
+            android:layout_gravity="center"
+            android:background="@drawable/nami_button"
+            android:text="@string/button_text1"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/kanri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tyoikaku"
+            android:textColor="@color/black"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            android:layout_marginTop="500dp"
+            android:text="@string/textH3"
+            android:maxLines="1"
+            android:textSize="45sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
