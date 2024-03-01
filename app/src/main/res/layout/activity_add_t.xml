@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".addT">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="管理しよう！"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:fontFamily="@font/boroboro"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="今日の日付をつけよう！"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        />
+
+    <NumberPicker
+        android:id="@+id/month"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        style="@style/MyNumberPicker"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="150dp"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="-280dp"
+        android:text="/"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="90dp"
+
+        />
+
+    <NumberPicker
+        android:id="@+id/day"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        style="@style/MyNumberPicker"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="150dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="今日何時間休んだかな？"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="400dp"
+        />
+
+    <NumberPicker
+        android:id="@+id/time"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        style="@style/MyNumberPicker"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="400dp"
+        />
+
+    <Button
+        android:id="@+id/ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginTop="650dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

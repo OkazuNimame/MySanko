@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/three_button"
+        android:text="保存"
+        android:textColor="@color/black"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/three_button"
+        android:layout_gravity="center_horizontal"
+        android:text="消去"
+        android:textColor="@color/black"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/three_button"
+        android:layout_gravity="right"
+        android:text="戻る"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="君が設定した日付↓"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/tyoikaku"/>
+
+    <NumberPicker
+        android:id="@+id/month"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="200dp"/>
+
+    <NumberPicker
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
+        android:text="/"
+        android:gravity="center"/>
+
+</FrameLayout>
