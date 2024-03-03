@@ -116,6 +116,7 @@ public class my_timeLimit extends AppCompatActivity {
             public void onValueSelected(Entry e, Highlight h) {
                 Intent intent = new Intent(my_timeLimit.this, max_time.class);
                 startActivity(intent);
+                finish();
 
             }
 

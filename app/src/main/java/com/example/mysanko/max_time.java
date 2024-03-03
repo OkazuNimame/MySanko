@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,13 @@ Button kettei,deleteButton;
 
         deleteButton = findViewById(R.id.deletebutton);
         int maxnumber = numberPicker.getValue();
+
+        SoundPool soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
+        int sound = soundPool.load(max_time.this,R.raw.kettei,1);
+
+        SoundPool soundPool2 = new SoundPool(2,AudioManager.STREAM_MUSIC,0);
+        int sound2 = soundPool2.load(max_time.this,R.raw.kyanseru,0);
+
         kettei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +49,8 @@ Button kettei,deleteButton;
                 max_time_database maxTimeDatabase = new max_time_database(max_time.this);
                 maxTimeDatabase.saveWord(maxnumber);
                 startActivity(intent);
+                soundPool.play(sound, 1f, 1f, 0, 0, 1f);
+                finish();
             }
         });
 
@@ -49,6 +60,8 @@ Button kettei,deleteButton;
                 Intent intent = new Intent(max_time.this, my_timeLimit.class);
                 deleteBreakDuration();
                 startActivity(intent);
+                soundPool2.play(sound2, 1f, 1f, 0, 0, 1f);
+                finish();
 
             }
         });
