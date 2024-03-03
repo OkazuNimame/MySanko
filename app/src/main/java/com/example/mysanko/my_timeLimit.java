@@ -1,25 +1,15 @@
 package com.example.mysanko;
 
-import static android.graphics.Color.*;
-import static com.example.mysanko.time_database.DATABASE_NAME;
-import static com.example.mysanko.time_database.TABLE_NAME;
+import static android.graphics.Color.rgb;
 import static com.example.mysanko.time_database._ID;
 import static com.example.mysanko.time_database.break_duration;
 import static com.example.mysanko.time_database.date;
 import static com.example.mysanko.time_database.date2;
-import static com.example.mysanko.time_database.max_duration;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -27,10 +17,11 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -45,7 +36,6 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +50,9 @@ public class my_timeLimit extends AppCompatActivity {
     private List<String> dates = new ArrayList<>();
     private List<Integer> restingTimes = new ArrayList<>();
     private List<Long> yourDatabaseIdList = new ArrayList<>();
-Button addbutton;
+    int maxNumber = 0;
+    Button addbutton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +65,8 @@ Button addbutton;
         barChart = findViewById(R.id.horizonatal);
 
 
-        SoundPool soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
-        sound = soundPool.load(my_timeLimit.this,R.raw.poin,1);
+        SoundPool soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        sound = soundPool.load(my_timeLimit.this, R.raw.poin, 1);
 
         getDataFromDatabase();
 
@@ -87,6 +79,7 @@ Button addbutton;
                 soundPool.play(sound, 1f, 1f, 0, 0, 1f);
 
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -96,7 +89,7 @@ Button addbutton;
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 // クリックされたエントリーのX軸のインデックスを取得
-                int selectedIndex = (int) e.getX() ;
+                int selectedIndex = (int) e.getX();
 
                 // データベースIDのリストから選択されたインデックスに対応するデータベースIDを取得
                 if (selectedIndex >= 0 && selectedIndex < yourDatabaseIdList.size()) {
@@ -107,9 +100,25 @@ Button addbutton;
                     Intent intent = new Intent(my_timeLimit.this, adb.class);
                     intent.putExtra("time", selectedDatabaseId);
                     startActivityForResult(intent, requestCode);
+                    finish();
                 }
 
             }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                Intent intent = new Intent(my_timeLimit.this, max_time.class);
+                startActivity(intent);
+
+            }
+
             @Override
             public void onNothingSelected() {
 
@@ -117,30 +126,47 @@ Button addbutton;
         });
 
 
-
-
         SQLiteDatabase db = timeDatabase.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME,new String[]{break_duration},null,null,null,null,null);
-            if (cursor != null && cursor.moveToFirst()) {
-                int totalBreakDuration = 0;
+        Cursor cursor = db.query(time_database.TABLE_NAME, new String[]{break_duration}, null, null, null, null, null);
 
+        max_time_database maxTimeDatabase = new max_time_database(my_timeLimit.this);
+
+        SQLiteDatabase database = maxTimeDatabase.getReadableDatabase();
+
+        Cursor cursor2 = database.query(max_time_database.TABLE_NAME, new String[]{max_time_database.maxT}, null, null, null, null, null);
+
+        if(cursor2 != null && cursor2.moveToFirst()) {
+            maxNumber = cursor2.getInt(cursor2.getColumnIndexOrThrow(max_time_database.maxT));
+        }
+
+
+        if (maxNumber != 0) {
+            // Set up pie chart entries
+            if (cursor != null && cursor.moveToFirst() && cursor2 != null && cursor2.moveToFirst()) {
+                int totalBreakDuration = 0;
+                maxNumber = cursor2.getInt(cursor2.getColumnIndexOrThrow(max_time_database.maxT));
                 do {
                     int breakDuration = cursor.getInt(cursor.getColumnIndexOrThrow(break_duration));
                     totalBreakDuration += breakDuration;
+                   // Toast.makeText(my_timeLimit.this,String.valueOf(totalBreakDuration),Toast.LENGTH_SHORT).show();
                 } while (cursor.moveToNext());
 
-                // ここでtotalBreakDurationを使用して必要な処理を行う
-                // 例えば、円グラフや他のビューに表示するなど
-
-                // Set up pie chart entries
                 ArrayList<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry(totalBreakDuration, ""));
+                entries.add(new PieEntry(totalBreakDuration * 100 , "休憩した時間"));
+                int n = maxNumber - totalBreakDuration ;
+                entries.add(new PieEntry(n * 100 , "残りの時間"));
+
+                // ... (previous code)
 
                 // Set up the dataset
                 PieDataSet dataSet = new PieDataSet(entries, "休んだ合計");
-                int skyBlueColor = rgb(135, 206, 235);
                 dataSet.setValueTextSize(13f);
-                dataSet.setColors(skyBlueColor);
+                int breakTimeColor = Color.rgb(255, 0, 0);
+                int remainingTimeColor = Color.rgb(0, 0, 255);
+                ArrayList<Integer> colors = new ArrayList<>();
+                colors.add(breakTimeColor);
+                colors.add(remainingTimeColor);
+                dataSet.setColors(colors);
 
                 // Set up the pie chart data
                 PieData data = new PieData(dataSet);
@@ -148,41 +174,93 @@ Button addbutton;
                 // Customize the pie chart
                 pieChart.setData(data);
                 pieChart.getDescription().setEnabled(false);
-                pieChart.setCenterText("合計\n" + totalBreakDuration);
-                int whiteColor = android.graphics.Color.rgb(255, 255, 255);
+                pieChart.setCenterText("合計\n" + totalBreakDuration + "/" + maxNumber + "時間");
+                pieChart.setBackgroundColor(Color.WHITE);
 
-                // ColorDrawableの作成
-                Drawable whiteDrawable = new ColorDrawable(whiteColor);
-                pieChart.setBackground(whiteDrawable);
-                pieChart.invalidate(); // Refresh the chart
+                // Additional configuration for PieChart
+                pieChart.setUsePercentValues(true);
+                pieChart.setDrawHoleEnabled(true);
+                pieChart.setHoleColor(Color.TRANSPARENT);
+                pieChart.setHoleRadius(30f);
+                pieChart.setTransparentCircleRadius(40f);
+                pieChart.setEntryLabelColor(Color.BLACK);
+
+                pieChart.invalidate();
+
+                if(totalBreakDuration == maxNumber){
+                    Toast.makeText(my_timeLimit.this,"もう休めないよ！！",Toast.LENGTH_SHORT).show();
+                } else if (totalBreakDuration > maxNumber) {
+                    Toast.makeText(my_timeLimit.this,"もう超えてるよ！涙",Toast.LENGTH_SHORT).show();
+                }
             }
-        }
-
-    private void getDataFromDatabase() {
-        // データベースから日付と休んだ時間のデータを取得
-        SQLiteDatabase db = timeDatabase.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{_ID, date,date2, break_duration},
-                null, null, null, null, null);
-
-        int index = 0; // インデックスを初期化
-
-        while (cursor.moveToNext()) {
-            long id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            String date = cursor.getString(cursor.getColumnIndexOrThrow(time_database.date));
-            String date2 = cursor.getString(cursor.getColumnIndexOrThrow(time_database.date2));
-            int time = cursor.getInt(cursor.getColumnIndexOrThrow(time_database.break_duration));
-            String all = date + "/" + date2;
-            restingTimes.add(time);
-            entries.add(new BarEntry(index, time, all));// index を使用する
-
-            yourDatabaseIdList.add(id); // データベースIDを追加
-            dates.add(all);
-            index++; // インデックスを増やす
-        }
+                }else{
 
 
+                    // Set up pie chart entries
+                    if (cursor != null && cursor.moveToFirst()) {
+                        int totalBreakDuration = 0;
+
+                        do {
+                            int breakDuration = cursor.getInt(cursor.getColumnIndexOrThrow(break_duration));
+                            totalBreakDuration += breakDuration;
+                        } while (cursor.moveToNext());
+
+                        ArrayList<PieEntry> entries = new ArrayList<>();
+                        entries.add(new PieEntry(totalBreakDuration * 100 / 10, "休憩した時間"));
+
+                        int breakTimeColor = Color.rgb(255, 0, 0);
+                        ArrayList<Integer> colors = new ArrayList<>();
+                        colors.add(breakTimeColor);
+
+                        // Set up the dataset
+                        PieDataSet dataSet = new PieDataSet(entries, "休んだ合計");
+                        dataSet.setValueTextSize(13f);
+                        dataSet.setColors(colors);
+
+                        // Set up the pie chart data
+                        PieData data = new PieData(dataSet);
+
+                        // Customize the pie chart
+                        pieChart.setData(data);
+                        pieChart.getDescription().setEnabled(false);
+                        pieChart.setCenterText("Your Center Text");
+                        pieChart.setBackgroundColor(Color.WHITE);
+
+
+                        pieChart.setCenterText("合計\n" + totalBreakDuration + "時間");
+
+                        pieChart.invalidate();
+                    }
+                }
+        cursor2.close();
         cursor.close();
-    }
+            }
+        private void getDataFromDatabase () {
+            // データベースから日付と休んだ時間のデータを取得
+            SQLiteDatabase db = timeDatabase.getReadableDatabase();
+            Cursor cursor = db.query(time_database.TABLE_NAME, new String[]{_ID, date, date2, break_duration},
+                    null, null, null, null, null);
+
+            int index = 0; // インデックスを初期化
+
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow(time_database.date));
+                String date2 = cursor.getString(cursor.getColumnIndexOrThrow(time_database.date2));
+                int time = cursor.getInt(cursor.getColumnIndexOrThrow(time_database.break_duration));
+                String all = date + "/" + date2;
+                restingTimes.add(time);
+                entries.add(new BarEntry(index, time, all));// index を使用する
+
+                yourDatabaseIdList.add(id); // データベースIDを追加
+                dates.add(all);
+                index++; // インデックスを増やす
+            }
+
+
+            cursor.close();
+        }
+
     public void updateBarChart() {
         BarDataSet dataSet = new BarDataSet(entries, "休んだ時間");
         int skyBlueColor = rgb(135, 206, 235);

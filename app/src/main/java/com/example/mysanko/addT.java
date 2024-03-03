@@ -54,6 +54,7 @@ Button ok;
                 Intent intent = new Intent(addT.this, my_timeLimit.class);
                 startActivity(intent);
 
+                finish();
 
             }
         });
