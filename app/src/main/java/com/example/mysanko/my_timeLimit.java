@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -33,6 +35,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -149,49 +152,83 @@ public class my_timeLimit extends AppCompatActivity {
                 do {
                     int breakDuration = cursor.getInt(cursor.getColumnIndexOrThrow(break_duration));
                     totalBreakDuration += breakDuration;
-                   // Toast.makeText(my_timeLimit.this,String.valueOf(totalBreakDuration),Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(my_timeLimit.this,String.valueOf(totalBreakDuration),Toast.LENGTH_SHORT).show();
                 } while (cursor.moveToNext());
 
-                ArrayList<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry(totalBreakDuration * 100 , "休憩した時間"));
-                int n = maxNumber - totalBreakDuration ;
-                entries.add(new PieEntry(n * 100 , "残りの時間"));
+                if (maxNumber < totalBreakDuration) {
+                    ArrayList<PieEntry>e = new ArrayList<>();
+                    e.add(new PieEntry(totalBreakDuration * 100, "休憩した時間"));
+                    int maxober = 0;
+                    e.add(new PieEntry(maxober,"残りの時間"));
 
-                // ... (previous code)
+                    PieDataSet dataSet = new PieDataSet(e, "");
+                    dataSet.setValueTextSize(13f);
+                    int breakTimeColor = Color.rgb(255, 0, 0);
+                    int remainingTimeColor = Color.rgb(0, 0, 255);
+                    ArrayList<Integer> colors = new ArrayList<>();
+                    colors.add(breakTimeColor);
+                    colors.add(remainingTimeColor);
+                    dataSet.setColors(colors);
 
-                // Set up the dataset
-                PieDataSet dataSet = new PieDataSet(entries, "休んだ合計");
-                dataSet.setValueTextSize(13f);
-                int breakTimeColor = Color.rgb(255, 0, 0);
-                int remainingTimeColor = Color.rgb(0, 0, 255);
-                ArrayList<Integer> colors = new ArrayList<>();
-                colors.add(breakTimeColor);
-                colors.add(remainingTimeColor);
-                dataSet.setColors(colors);
+                    PieData data = new PieData(dataSet);
+                    pieChart.setData(data);
+                    pieChart.getDescription().setEnabled(false);
+                    pieChart.setCenterText("残りの時間はありません");
+                    pieChart.setBackgroundColor(Color.WHITE);
 
-                // Set up the pie chart data
-                PieData data = new PieData(dataSet);
+                    pieChart.setUsePercentValues(true);
+                    pieChart.setDrawHoleEnabled(true);
+                    pieChart.setHoleColor(Color.TRANSPARENT);
+                    pieChart.setHoleRadius(30f);
+                    pieChart.setTransparentCircleRadius(40f);
+                    pieChart.setEntryLabelColor(Color.BLACK);
 
-                // Customize the pie chart
-                pieChart.setData(data);
-                pieChart.getDescription().setEnabled(false);
-                pieChart.setCenterText("合計\n" + totalBreakDuration + "/" + maxNumber + "時間");
-                pieChart.setBackgroundColor(Color.WHITE);
+                    pieChart.invalidate();
 
-                // Additional configuration for PieChart
-                pieChart.setUsePercentValues(true);
-                pieChart.setDrawHoleEnabled(true);
-                pieChart.setHoleColor(Color.TRANSPARENT);
-                pieChart.setHoleRadius(30f);
-                pieChart.setTransparentCircleRadius(40f);
-                pieChart.setEntryLabelColor(Color.BLACK);
+                    Toast.makeText(my_timeLimit.this, "もう超えてるよ！涙", Toast.LENGTH_SHORT).show();
 
-                pieChart.invalidate();
+                } else {
+                    ArrayList<PieEntry> entries = new ArrayList<>();
+                    entries.add(new PieEntry(totalBreakDuration * 100 ,"休憩した時間"));
+                    int n = maxNumber - totalBreakDuration;
+                    entries.add(new PieEntry(n * 100, "残りの時間"));
 
-                if(totalBreakDuration == maxNumber){
-                    Toast.makeText(my_timeLimit.this,"もう休めないよ！！",Toast.LENGTH_SHORT).show();
-                } else if (totalBreakDuration > maxNumber) {
-                    Toast.makeText(my_timeLimit.this,"もう超えてるよ！涙",Toast.LENGTH_SHORT).show();
+                    // ... (previous code)
+
+                    // Set up the dataset
+                    PieDataSet dataSet = new PieDataSet(entries, "");
+                    dataSet.setValueTextSize(13f);
+                    int breakTimeColor = Color.rgb(255, 0, 0);
+                    int remainingTimeColor = Color.rgb(0, 0, 255);
+                    ArrayList<Integer> colors = new ArrayList<>();
+                    colors.add(breakTimeColor);
+                    colors.add(remainingTimeColor);
+                    dataSet.setColors(colors);
+
+                    // Set up the pie chart data
+                    PieData data = new PieData(dataSet);
+
+                    // Customize the pie chart
+                    pieChart.setData(data);
+                    pieChart.getDescription().setEnabled(false);
+                    pieChart.setCenterText("合計\n" + totalBreakDuration + "/" + maxNumber + "時間");
+                    pieChart.setBackgroundColor(Color.WHITE);
+
+                    // Additional configuration for PieChart
+                    pieChart.setUsePercentValues(true);
+                    pieChart.setDrawHoleEnabled(true);
+                    pieChart.setHoleColor(Color.TRANSPARENT);
+                    pieChart.setHoleRadius(30f);
+                    pieChart.setTransparentCircleRadius(40f);
+                    pieChart.setEntryLabelColor(Color.BLACK);
+
+                    pieChart.invalidate();
+
+                    if (totalBreakDuration == maxNumber) {
+                        Toast.makeText(my_timeLimit.this, "もう休めないよ！！", Toast.LENGTH_SHORT).show();
+                    } else if (totalBreakDuration > maxNumber) {
+                        Toast.makeText(my_timeLimit.this, "もう超えてるよ！涙", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
                 }else{
@@ -265,7 +302,10 @@ public class my_timeLimit extends AppCompatActivity {
     public void updateBarChart() {
         BarDataSet dataSet = new BarDataSet(entries, "休んだ時間");
         int skyBlueColor = rgb(135, 206, 235);
-        dataSet.setColors(skyBlueColor);
+        int[] colors = new int[]{ContextCompat.getColor(this, R.color.blue), Color.TRANSPARENT};
+        GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+
+        dataSet.setGradientColor(0, this.getColor(R.color.blue));
         dataSet.setValueTextSize(12f);
 
         data = new BarData(dataSet);

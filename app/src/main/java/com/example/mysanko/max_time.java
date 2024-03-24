@@ -3,8 +3,10 @@ package com.example.mysanko;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -12,12 +14,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Toast;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class max_time extends AppCompatActivity {
 NumberPicker numberPicker;
 Button kettei,deleteButton;
+ImageButton gakuen;
+    private int[] imageArray = {R.drawable.mirai_ai, R.drawable.buraidaru, R.drawable.kodomo,R.drawable.suportu,R.drawable.wedhingu};
+    private int currentImageIndex = 0;
+private List<String> savedFileNames = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +48,8 @@ Button kettei,deleteButton;
         kettei = findViewById(R.id.kettei);
 
         deleteButton = findViewById(R.id.deletebutton);
+
+        gakuen = findViewById(R.id.gakuen);
         int maxnumber = numberPicker.getValue();
 
         SoundPool soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
@@ -67,6 +84,7 @@ Button kettei,deleteButton;
         });
 
 
+
     }
     public void deleteBreakDuration() {
         max_time_database maxTimeDatabase = new max_time_database(max_time.this);
@@ -81,3 +99,5 @@ Button kettei,deleteButton;
         db.close();
     }
 }
+
+

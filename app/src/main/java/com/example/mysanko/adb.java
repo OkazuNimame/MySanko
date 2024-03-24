@@ -74,8 +74,10 @@ public class adb extends AppCompatActivity {
                     int newPosition = position + 1;
                     timeDatabase.updateData(newPosition,monthS,dayS,timeNum);
                     setResult(RESULT_OK);
-
+                    Intent intent = new Intent(adb.this,my_timeLimit.class);
+                    startActivity(intent);
                     finish();
+
 
                 }
             });
@@ -88,6 +90,8 @@ public class adb extends AppCompatActivity {
                     Intent intent = new Intent(adb.this, my_timeLimit.class);
                     startActivity(intent);
                     setResult(RESULT_OK);
+                    Intent intent2 = new Intent(adb.this,my_timeLimit.class);
+                    startActivity(intent2);
                     finish();
                 }
             });
@@ -97,6 +101,8 @@ public class adb extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(adb.this,my_timeLimit.class);
                     startActivity(intent);
+                    Intent intent3 = new Intent(adb.this,my_timeLimit.class);
+                    startActivity(intent3);
                     finish();
                 }
             });

@@ -12,7 +12,7 @@ import android.widget.NumberPicker;
 
 public class addT extends AppCompatActivity {
 NumberPicker month,day,time;
-Button ok;
+Button ok,back;
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ Button ok;
         day = findViewById(R.id.day);
         time = findViewById(R.id.time);
         ok = findViewById(R.id.ok);
+        back = findViewById(R.id.back);
 
 
         month.setTextSize(100);
@@ -56,6 +57,15 @@ Button ok;
 
                 finish();
 
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(addT.this, my_timeLimit.class);
+                startActivity(intent);
+                finish();
             }
         });
 
